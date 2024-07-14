@@ -9,8 +9,6 @@
   :type 'string
   :group 'org-plantuml-mindmap)
 
-(setq org-plantuml-mindmap-result-type "svg")
-
 (defcustom org-plantuml-mindmap-folder ""
   "If non-nil, create a folder for the PlantUML mind map files."
   :type 'string
@@ -25,18 +23,9 @@
   "Check the value of `org-plantuml-mindmap-folder` and set `org-plantuml-mindmap-create' accordingly"
   (let (org-plantuml-mindmap-folder-name)
     (cond ((string= org-plantuml-mindmap-result-type "svg")
-           (concat " :file " (org-plantuml-mindmap--folder) (org-plantuml-mindmap--formatted-timestamp) ".svg"))
-          (t
-           (message "not-test")))))
-
-(defun org-plantuml-mindmap-result ()
-  "Check the value of `org-plantuml-mindmap-result-type` and set `org-plantuml-mindmap-create' accordingly"
-  (let (org-plantuml-mindmap-result)
-    (cond ((string= org-plantuml-mindmap-result-type "svg")
            (concat " :file " org-plantuml-mindmap-folder (org-plantuml-mindmap--formatted-timestamp) ".svg"))
           (t
-           (message "not-test")))))
-
+           (message "Wrong `org-plantuml-mindmap-result'")))))
 
 (defun org-plantuml-mindmap-create ()
   "Create a PlantUML mind map code block from the current Org buffer."
@@ -59,17 +48,5 @@
     (insert (concat "#+BEGIN_SRC plantuml" (org-plantuml-mindmap-result) "\n"))
     (insert (format "@startmindmap\n%s@endmindmap" mind-map-code))
     (insert "\n#+END_SRC")))
-
-(defun my/org-plantuml-mindmap-create ()
-  "Insert a PlantUML mind map code block in the current Org buffer."
-  (interactive)
-  (setq-local org-plantuml-mindmap-folder (concat
-                                           org-directory
-    			                           org-attachments-folder
-                                           "mindmaps/"
-    			                           (file-name-sans-extension (buffer-name))
-    			                           "/"))
-  (org-plantuml-mindmap-create)
-  (save-buffer))
 
 (provide 'org-plantuml-mindmap)
